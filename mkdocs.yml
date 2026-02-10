@@ -1,0 +1,14 @@
+site_name: CycloTorch
+nav:
+  - Home: index.md
+  - CSC_estimators: CSC_estimators.md
+  - FRESHfilt: FRESHfilt.md
+  - Demos:
+      - Sine Demo: SineDemo.md
+      - Periodic excitation: OneDoFDemo.md
+      - Timing Demo: TimingDemo.md
+repo_url: https://gitlab.kuleuven.be/lmsd-cm/dsp-python/cyclostationary-analysis/torchcyclostationarydev
+repo_name: GitLab
+site_dir: public
+theme: readthedocs
+

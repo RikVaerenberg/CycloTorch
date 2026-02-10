@@ -1,0 +1,18 @@
+name: csc_library_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - cpython=3.13.5
+  - pip=25.1
+  - plotly=6.3.0
+  - pytest=8.4.1
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu129
+      - torch==2.8.0+cu129
+      - torchaudio==2.8.0+cu129
+      - torchvision==0.23.0+cu129
+      - numpy==2.3.3
+      - scipy==1.16.2
+variables:
+  PLOTLY_RENDERER: browser

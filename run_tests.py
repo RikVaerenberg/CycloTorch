@@ -1,0 +1,4 @@
+import cyclotorch
+
+cyclotorch.test()
+
