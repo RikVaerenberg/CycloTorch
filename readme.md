@@ -6,6 +6,9 @@ Currently, there are five Cyclic Spectral Correlation (CSC) estimators implement
 
 In addition, the optimum and adaptive FRESH filter are implemented.
 
+The code can be found on gitlab [here](https://gitlab.kuleuven.be/lmsd-cm/public/cyclotorch).
+The documentation can be found [here](https://lmsd-cm.pages.gitlab.kuleuven.be/public/cyclotorch).
+
 ## Running the code 
 Create the required anaconda environment:
 ```bash
@@ -29,5 +32,6 @@ mkdocs build
 - [[1]](https://doi.org/10.1016/j.ymssp.2017.01.011) Antoni, J., Xin, G., & Hamzaoui, N. (2017). Fast computation of the spectral correlation. Mechanical Systems and Signal Processing, 92, 248-277.
 
 - [2] Gardner, William A. Statistical Spectral Analysis: A Nonprobabilistic Theory. Prentice-Hall, Inc., 1986.
+
 
 - [[3]](https://doi.org/10.1109/78.340776)  Spooner, Chad M., and William A. Gardner. "The cumulant theory of cyclostationary time-series. II. Development and applications." IEEE Transactions on Signal Processing 42.12 (2002): 3409-3429.
