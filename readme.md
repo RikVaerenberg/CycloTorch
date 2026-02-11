@@ -1,6 +1,6 @@
-# Torchcyclostationary: A library for GPU accelerated cyclostationary analysis
+# CycloTorch: A library for GPU accelerated cyclostationary analysis
 
-Torchcylcostationary is a library developed for cyclostationary analysis of real signals using PyTorch in order to enable GPU accelerated cyclostationary analysis.
+CycloTorch is a library developed for cyclostationary analysis of real signals using PyTorch in order to enable GPU accelerated cyclostationary analysis.
 
 Currently, there are five Cyclic Spectral Correlation (CSC) estimators implemented (each with their respective asymmetric and symmetric estimators): the averaged cyclic periodogram (ACP), the frequency smoothing method (FSM), the Fast SC, the Faster SC and the Strip Spectral Correlation Algorithm (SSCA).
 
@@ -35,3 +35,4 @@ mkdocs build
 
 
 - [[3]](https://doi.org/10.1109/78.340776)  Spooner, Chad M., and William A. Gardner. "The cumulant theory of cyclostationary time-series. II. Development and applications." IEEE Transactions on Signal Processing 42.12 (2002): 3409-3429.
+
