@@ -59,10 +59,6 @@ If True, computes the coherence instead of the correlation. Default is False.
 
 Device to perform computation on. If None, uses cuda device if available.
 
-**results_device** : torch.device, *optional*
-
-Device to store results. Default is CPU. Can be set to GPU for faster computation (requires more memory).
-
 **per_batch** : int, *optional*
 
 Batch size for computation. Lower if out-of-memory errors occur. Default is 20.

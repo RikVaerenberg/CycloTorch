@@ -122,7 +122,6 @@ def CSC_ACP(
         convention = 'symmetric',
         coherence = False,
         device= None,
-        results_device = torch.device('cpu'), #Can be set to GPU, but requires more GPU memory
         per_batch = 20 #Purely for optimization, if out of memory error occurs lower this value
         
     )->torch.Tensor:
@@ -155,8 +154,6 @@ def CSC_ACP(
         If True, computes the coherence instead of the correlation. Default is False.
     device : torch.device or str or None, optional
         Device to perform computation on. If None, uses cuda device if available.
-    results_device : torch.device, optional
-        Device to store results. Default is CPU. Can be set to GPU for faster computation (requires more memory).
     per_batch : int, optional
         Batch size for computation. Lower if out-of-memory errors occur. Default is 20.
 
@@ -191,26 +188,26 @@ def CSC_ACP(
         if nfft is None:
             nfft = window_len
         
-        x = _cast_tensor(x.flatten(),results_device)
-        y = _cast_tensor(y.flatten(),results_device)
-        alpha_arr = _cast_tensor(alpha_arr,results_device)
+        x = _cast_tensor(x.flatten(),device)
+        y = _cast_tensor(y.flatten(),device)
+        alpha_arr = _cast_tensor(alpha_arr,device)
         cdtype = _complex_type(x.dtype)
 
-        out_tensor = torch.zeros(alpha_arr.size(0),nfft,dtype=cdtype,device=results_device)
+        out_tensor = torch.zeros(alpha_arr.size(0),nfft,dtype=cdtype,device=device)
         
         if convention == 'symmetric':
             batch_cspd_func = lambda alpha_arr_b : cpsd(
-                x[None,:] * torch.exp(-1j*torch.pi*alpha_arr_b[:,None]*torch.arange(x.size(0),device=results_device)[None,:]/fs), # X(f+a/2),
-                y[None,:] * torch.exp(1j*torch.pi*alpha_arr_b[:,None]*torch.arange(y.size(0),device=results_device)[None,:]/fs), # Y(f-a/2),
+                x[None,:] * torch.exp(-1j*torch.pi*alpha_arr_b[:,None]*torch.arange(x.size(0),device=device)[None,:]/fs), # X(f+a/2),
+                y[None,:] * torch.exp(1j*torch.pi*alpha_arr_b[:,None]*torch.arange(y.size(0),device=device)[None,:]/fs), # Y(f-a/2),
                 window_len,nfft=nfft,n_overlap=n_overlap,hop_len=hop_len,window=window,fs=fs,device=device,coherence=coherence)
         elif convention == 'asymmetric_negative':
 
             batch_cspd_func = lambda alpha_arr_b : cpsd(x[None,:],# X(f)
-                                                        y[None,:] * torch.exp(2j*torch.pi*alpha_arr_b[:,None]*torch.arange(y.size(0),device=results_device)[None,:]/fs),# Y(f-a)
+                                                        y[None,:] * torch.exp(2j*torch.pi*alpha_arr_b[:,None]*torch.arange(y.size(0),device=device)[None,:]/fs),# Y(f-a)
                                                         window_len,nfft=nfft,n_overlap=n_overlap,hop_len=hop_len,window=window,fs=fs,device=device,coherence=coherence)
         elif convention == 'asymmetric_positive':
 
-            batch_cspd_func = lambda alpha_arr_b : cpsd(x[None,:] * torch.exp(-2j*torch.pi*alpha_arr_b[:,None]*torch.arange(x.size(0),device=results_device)[None,:]/fs), # X(f+a)
+            batch_cspd_func = lambda alpha_arr_b : cpsd(x[None,:] * torch.exp(-2j*torch.pi*alpha_arr_b[:,None]*torch.arange(x.size(0),device=device)[None,:]/fs), # X(f+a)
                                                         y[None,:], # Y(f)
                                                         window_len,nfft=nfft,n_overlap=n_overlap,hop_len=hop_len,window=window,fs=fs,device=device,coherence=coherence)
         out_tensor = _batch_deploy(batch_cspd_func,out_tensor,per_batch,alpha_arr)
