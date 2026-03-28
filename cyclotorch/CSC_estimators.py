@@ -82,10 +82,10 @@ def CSC_FSM(
     
     with torch.no_grad():
         
-        x = _cast_tensor(x.flatten(),results_device)
-        y = _cast_tensor(y.flatten(),results_device)
+        x = _cast_tensor(x.flatten(),device)
+        y = _cast_tensor(y.flatten(),device)
         
-        alpha_arr = _cast_tensor(alpha_arr,results_device)
+        alpha_arr = _cast_tensor(alpha_arr,device)
         cdtype = _complex_type(x.dtype)
 
         out_tensor = torch.zeros(alpha_arr.size(0),len(x),dtype=cdtype,device=results_device)
