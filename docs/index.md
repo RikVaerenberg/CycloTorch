@@ -22,7 +22,7 @@ It currently includes implementation different cyclic spectral correlation (CSC)
 
 - [[5](https://doi.org/10.1109/26.212375)] Gardner, William A. "Cyclic Wiener filtering: theory and method." IEEE Transactions on communications 41.1 (2002): 151-163.
 
-
+- [[6](https://doi.org/10.1016/C2017-0-04240-4)] Napolitano, Antonio. "Cyclostationary processes and time series: theory, applications, and generalizations." Academic Press, 2019.
 
 <!-- ## Commands
 
