@@ -107,7 +107,7 @@ def main():
     
     
     
-    cycle_freq = np.array([-f_envelope,0,f_envelope]).astype(np.float32),
+    cycle_freq = np.array([-f_envelope,0,f_envelope]).astype(np.float32)
     freshfilt = cyclotorch.FRESHfilt.optimum_freshfilt(signal,target,cycle_freq=cycle_freq,filt_len=1024,fs=1.0,impose_hermitian=True)
     extracted_sig_optfresh = cyclotorch.FRESHfilt.apply_freshfilt(signal,freshfilt).data.numpy()
     print(f'SNR after FRESH filtering {compute_snr(extracted_sig_optfresh,target)}')
