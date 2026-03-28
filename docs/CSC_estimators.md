@@ -122,6 +122,10 @@ If True, compute spectral coherence instead of SCD. Default is False.
 
 Device to perform computation on. If None, automatically selects CUDA if available, otherwise CPU.
 
+**results_device** : torch.device, *optional*
+
+Device to store results. Default is CPU. Can be set to GPU for faster computation (requires more memory).
+
 **per_batch** : int, *optional*
 
 Number of cyclic frequencies to process per batch for optimization. Lower this value if out-of-memory errors occur. Default is 10.

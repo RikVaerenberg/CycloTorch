@@ -18,6 +18,7 @@ def CSC_FSM(
     convention = 'symmetric',
     coherence = False,
     device= None,
+    results_device = torch.device('cpu'), #Can be set to GPU, but requires more GPU memory
     per_batch=10 #Purely for optimization, if out of memory error occurs lower this value
     )->torch.Tensor:
     """
@@ -41,6 +42,8 @@ def CSC_FSM(
         If True, compute spectral coherence instead of SCD. Default is False.
     device : torch.device or None, optional
         Device to perform computation on. If None, automatically selects CUDA if available, otherwise CPU.
+    results_device : torch.device, optional
+        Device to store results. Default is CPU. Can be set to GPU for faster computation (requires more memory).
     per_batch : int, optional
         Number of cyclic frequencies to process per batch for optimization. Lower this value if out-of-memory errors occur. Default is 10.
     
@@ -78,11 +81,7 @@ def CSC_FSM(
     
     
     with torch.no_grad():
-        #This could be set to GPU but will require more GPU memory
-        results_device = torch.device('cpu')
         
-
-
         x = _cast_tensor(x.flatten(),results_device)
         y = _cast_tensor(y.flatten(),results_device)
         
@@ -90,22 +89,23 @@ def CSC_FSM(
         cdtype = _complex_type(x.dtype)
 
         out_tensor = torch.zeros(alpha_arr.size(0),len(x),dtype=cdtype,device=results_device)
-        
         if convention == 'symmetric':
-            x_alpha = x[None,:] * torch.exp(-1j*torch.pi*alpha_arr[:,None]*torch.arange(x.size(0),device=results_device)[None,:]/fs) # X(f+a/2)
-            y_alpha = y[None,:] * torch.exp(1j*torch.pi*alpha_arr[:,None]*torch.arange(y.size(0),device=results_device)[None,:]/fs) # Y(f-a/2)
-            batch_fsm_func = lambda batch_x,batch_y : cspd_fsm(batch_x,batch_y,smooth_len=smooth_len,fs=fs,device=device,coherence=coherence)
-            out_tensor = _batch_deploy(batch_fsm_func,out_tensor,per_batch,x_alpha,y_alpha)
+            batch_cspd_func = lambda alpha_arr_b : cspd_fsm(
+                x[None,:] * torch.exp(-1j*torch.pi*alpha_arr_b[:,None]*torch.arange(x.size(0),device=device)[None,:]/fs), # X(f+a/2),
+                y[None,:] * torch.exp(1j*torch.pi*alpha_arr_b[:,None]*torch.arange(y.size(0),device=device)[None,:]/fs), # Y(f-a/2),
+               smooth_len=smooth_len,fs=fs,device=device,coherence=coherence).to(results_device)
         elif convention == 'asymmetric_negative':
-            x_alpha = x[None,:] # X(f)
-            y_alpha = y[None,:] * torch.exp(2j*torch.pi*alpha_arr[:,None]*torch.arange(y.size(0),device=results_device)[None,:]/fs) # Y(f-a)
-            batch_fsm_func = lambda batch_y : cspd_fsm(x_alpha,batch_y,smooth_len=smooth_len,fs=fs,device=device,coherence=coherence)
-            out_tensor = _batch_deploy(batch_fsm_func,out_tensor,per_batch,y_alpha)
-        if convention == 'asymmetric_positive':
-            x_alpha = x[None,:] * torch.exp(-2j*torch.pi*alpha_arr[:,None]*torch.arange(x.size(0),device=results_device)[None,:]/fs) # X(f+a)
-            y_alpha = y[None,:]  # Y(f)
-            batch_fsm_func = lambda batch_x : cspd_fsm(batch_x,y_alpha,smooth_len=smooth_len,fs=fs,device=device,coherence=coherence)
-            out_tensor = _batch_deploy(batch_fsm_func,out_tensor,per_batch,x_alpha)
+
+            batch_cspd_func = lambda alpha_arr_b : cspd_fsm(x[None,:],# X(f)
+                                                        y[None,:] * torch.exp(2j*torch.pi*alpha_arr_b[:,None]*torch.arange(y.size(0),device=device)[None,:]/fs),# Y(f-a)
+                                                        smooth_len=smooth_len,fs=fs,device=device,coherence=coherence).to(results_device)
+        elif convention == 'asymmetric_positive':
+
+            batch_cspd_func = lambda alpha_arr_b : cspd_fsm(x[None,:] * torch.exp(-2j*torch.pi*alpha_arr_b[:,None]*torch.arange(x.size(0),device=device)[None,:]/fs), # X(f+a)
+                                                        y[None,:], # Y(f)
+                                                        smooth_len=smooth_len,fs=fs,device=device,coherence=coherence).to(results_device)
+        out_tensor = _batch_deploy(batch_cspd_func,out_tensor,per_batch,alpha_arr)
+        
         return out_tensor
 
 

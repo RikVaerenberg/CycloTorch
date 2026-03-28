@@ -89,7 +89,6 @@ def optimum_freshfilt(signal,
                                      fs=fs,convention='asymmetric_negative',
                                      per_batch=per_batch,
                                      device=device,
-                                     results_device=device,
                                      coherence=False)
         # S_matrix is now a1,a2,f should be f,a2,a1
         S_matrix = torch.permute(S_matrix,(2,1,0))
@@ -106,7 +105,6 @@ def optimum_freshfilt(signal,
                                     convention='asymmetric_negative',
                                     per_batch=per_batch,
                                     device=device,
-                                    results_device=device,
                                     coherence=False).T
         
         # Done on CPU as torch linalg GPU requires lower precision to be quick (and synchronizes with the CPU anyway)
