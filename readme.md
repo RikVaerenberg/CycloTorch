@@ -10,11 +10,16 @@ The code can be found on gitlab [here](https://gitlab.kuleuven.be/lmsd-cm/public
 The documentation can be found [here](https://lmsd-cm.pages.gitlab.kuleuven.be/public/cyclotorch).
 
 ## Running the code 
-Create the required anaconda environment:
+To install the required dependencies inside an anaconda environment:
 ```bash
 conda env create -f environment.yaml
 ```
-And then use it to run_demos.py!
+The library includes three demos: 
+- OneDofDemo.py which demonstrates the application of cyclostationary analysis on a simulated vibration signal.
+- SineDemo.py which demonstrates the application of cyclostationary analysis on a simulated band-limited signal modulated by a sine wave.
+- TimingDemo.py which benchmarks the computational time across different estimators and compares the computational speed of CPU-only vs GPU accelerated.
+
+They can be run using run_demos.py
 Note that the library works best on a CUDA enabled device (and is required for the TimingDemo).
 
 ## Local version of the documentation
