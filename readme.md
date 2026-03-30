@@ -36,3 +36,4 @@ mkdocs build
 
 - [[3]](https://doi.org/10.1109/78.340776)  Spooner, Chad M., and William A. Gardner. "The cumulant theory of cyclostationary time-series. II. Development and applications." IEEE Transactions on Signal Processing 42.12 (2002): 3409-3429.
 
+- [[4](https://doi.org/10.1016/C2017-0-04240-4)] Napolitano, Antonio. "Cyclostationary processes and time series: theory, applications, and generalizations." Academic Press, 2019.
